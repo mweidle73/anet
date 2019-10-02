@@ -26,6 +26,7 @@ private with Ada.Finalization;
 with Interfaces.C;
 
 with Anet.Constants;
+with Anet.OS_Constants;
 with Anet.Socket_Families;
 
 package Anet.Sockets is
@@ -113,7 +114,8 @@ package Anet.Sockets is
    type Option_Name_Bool is
      (Broadcast,
       Reuse_Address,
-      TCP_Nodelay);
+      TCP_Nodelay,
+      IPv6_V6_Only);
    --  Supported boolean socket options.
 
    type Option_Name_Str is (Bind_To_Device);
@@ -153,7 +155,8 @@ private
    Options_Bool : constant array (Option_Name_Bool) of Interfaces.C.int
      := (Reuse_Address => Constants.Sys.SO_REUSEADDR,
          Broadcast     => Constants.Sys.SO_BROADCAST,
-         TCP_Nodelay   => Constants.Sys.TCP_NODELAY);
+         TCP_Nodelay   => Constants.Sys.TCP_NODELAY,
+         IPv6_V6_Only  => OS_Constants.IPV6_V6ONLY);
    --  Mapping for option names with boolean value.
 
    Options_Str : constant array (Option_Name_Str) of Interfaces.C.int

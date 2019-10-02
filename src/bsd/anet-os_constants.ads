@@ -24,6 +24,7 @@ package Anet.OS_Constants is
 
    IPV6_MULTICAST_IF   : constant := 9;  --  Sending interface
    IPV6_ADD_MEMBERSHIP : constant := 12; --  Join multicast group (IPv6)
+   IPV6_V6ONLY         : constant := 27; --  Set IPv6 socket to V6 only
 
    O_NONBLOCK          : constant := 4;  --  Non-blocking sockets
 

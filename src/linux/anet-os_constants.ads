@@ -27,6 +27,7 @@ package Anet.OS_Constants is
 
    IPV6_MULTICAST_IF   : constant := 17;   --  Sending interface
    IPV6_ADD_MEMBERSHIP : constant := 20;   --  Join multicast group (IPv6)
+   IPV6_V6ONLY         : constant := 26;   --  Set IPv6 socket to V6 only
 
    NETLINK_ROUTE       : constant := 0;    --  Routing/device hook
    NETLINK_FIREWALL    : constant := 3;    --  Firewalling hook

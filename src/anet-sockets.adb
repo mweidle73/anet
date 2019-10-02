@@ -24,7 +24,6 @@
 with GNAT.OS_Lib;
 
 with Anet.Errno;
-with Anet.OS_Constants;
 with Anet.Sockets.Thin;
 
 package body Anet.Sockets is
