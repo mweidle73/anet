@@ -47,10 +47,12 @@ package Anet.Sockets.Inet is
    --  IPv4 socket.
 
    procedure Bind
-     (Socket  : in out IPv4_Socket_Type;
-      Address :        IPv4_Addr_Type := Any_Addr;
-      Port    :        Port_Type);
+     (Socket     : in out IPv4_Socket_Type;
+      Address    :        IPv4_Addr_Type := Any_Addr;
+      Port       :        Port_Type;
+      Reuse_Addr :        Boolean        := True);
    --  Bind given IPv4 socket to the specified IPv4 address and port.
+   --  If Reuse_Addr is True, the SO_REUSEADDR option will be set as well.
 
    procedure Send
      (Socket   : IPv4_Socket_Type;
@@ -130,10 +132,12 @@ package Anet.Sockets.Inet is
    --  IPv6 socket.
 
    procedure Bind
-     (Socket  : in out IPv6_Socket_Type;
-      Address :        IPv6_Addr_Type := Any_Addr_V6;
-      Port    :        Port_Type);
+     (Socket     : in out IPv6_Socket_Type;
+      Address    :        IPv6_Addr_Type := Any_Addr_V6;
+      Port       :        Port_Type;
+      Reuse_Addr :        Boolean        := True);
    --  Bind given IPv6 socket to the specified IPv6 address and port.
+   --  If Reuse_Addr is True, the SO_REUSEADDR option will be set as well.
 
    procedure Send
      (Socket   : IPv6_Socket_Type;

@@ -154,17 +154,20 @@ package body Anet.Sockets.Inet is
    -------------------------------------------------------------------------
 
    procedure Bind
-     (Socket  : in out IPv4_Socket_Type;
-      Address :        IPv4_Addr_Type        := Any_Addr;
-      Port    :        Port_Type)
+     (Socket     : in out IPv4_Socket_Type;
+      Address    :        IPv4_Addr_Type := Any_Addr;
+      Port       :        Port_Type;
+      Reuse_Addr :        Boolean        := True)
    is
       Sockaddr : constant Thin.Inet.Sockaddr_In_Type
         := Thin.Inet.Create_Inet4 (Address => Address,
                                    Port    => Port);
    begin
-      Socket.Set_Socket_Option
-        (Option => Reuse_Address,
-         Value  => True);
+      if Reuse_Addr then
+         Socket.Set_Socket_Option
+           (Option => Reuse_Address,
+            Value  => True);
+      end if;
 
       Errno.Check_Or_Raise
         (Result  => Thin.C_Bind
@@ -178,17 +181,20 @@ package body Anet.Sockets.Inet is
    -------------------------------------------------------------------------
 
    procedure Bind
-     (Socket  : in out IPv6_Socket_Type;
-      Address :        IPv6_Addr_Type := Any_Addr_V6;
-      Port    :        Port_Type)
+     (Socket     : in out IPv6_Socket_Type;
+      Address    :        IPv6_Addr_Type := Any_Addr_V6;
+      Port       :        Port_Type;
+      Reuse_Addr :        Boolean        := True)
    is
       Sockaddr : constant Thin.Inet.Sockaddr_In_Type
         := Thin.Inet.Create_Inet6 (Address => Address,
                                    Port    => Port);
    begin
-      Socket.Set_Socket_Option
-        (Option => Reuse_Address,
-         Value  => True);
+      if Reuse_Addr then
+         Socket.Set_Socket_Option
+           (Option => Reuse_Address,
+            Value  => True);
+      end if;
 
       Errno.Check_Or_Raise
         (Result  => Thin.C_Bind
