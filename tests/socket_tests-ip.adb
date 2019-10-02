@@ -825,6 +825,10 @@ package body Socket_Tests.IP is
       delay 0.2;
 
       S_Cli.Init;
+      S_Cli.Set_Socket_Option
+        (Level  => IPv6_Level,
+         Option => IPv6_V6_Only,
+         Value  => True);
       S_Cli.Bind (Address => Loopback_Addr_V6,
                   Port    => Port + 1);
       S_Cli.Connect (Address => Loopback_Addr_V6,
