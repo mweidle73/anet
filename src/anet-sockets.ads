@@ -37,7 +37,7 @@ package Anet.Sockets is
       Stream_Socket);
    --  Supported socket modes.
 
-   type Level_Type is (Socket_Level, TCP_Level);
+   type Level_Type is (Socket_Level, TCP_Level, IPv6_Level);
    --  Protocol level type.
 
    type Sock_Shutdown_Cmd is
@@ -149,7 +149,8 @@ private
 
    Levels : constant array (Level_Type) of Interfaces.C.int
      := (Socket_Level => Constants.Sys.SOL_SOCKET,
-         TCP_Level    => Constants.Sys.IPPROTO_TCP);
+         TCP_Level    => Constants.Sys.IPPROTO_TCP,
+         IPv6_Level   => Constants.IPPROTO_IPV6);
    --  Protocol level mapping.
 
    Options_Bool : constant array (Option_Name_Bool) of Interfaces.C.int
