@@ -1,26 +1,20 @@
 DESTDIR ?= html
-PREPARE := $(shell mkdir -p $(DESTDIR))
-
-ASCIIDOC_OPTS = \
-	-a icons=font \
-	-a iconfont-remote! \
-	-a stylesdir=css \
-	-a stylesheet=styles.css \
-	-a sectanchors \
-	-o -
 
 all: $(DESTDIR)/index.html
 
 $(DESTDIR)/index.html: $(DESTDIR)/fonts $(DESTDIR)/css/font-awesome.css
-$(DESTDIR)/index.html: index ../README css/styles.css
-	TZ=UTC asciidoctor $(ASCIIDOC_OPTS) $< > $@
+$(DESTDIR)/index.html: index ../README css/styles.css | $(DESTDIR)
+	asciidoctor $< -o $@
 
-$(DESTDIR)/css/font-awesome.css: css/font-awesome.css
+$(DESTDIR)/css/font-awesome.css: css/font-awesome.css | $(DESTDIR)
 	mkdir -p $(DESTDIR)/css
 	cp $< $@
 
-$(DESTDIR)/fonts: fonts
+$(DESTDIR)/fonts: fonts | $(DESTDIR)
 	cp -R $< $@
 
+$(DESTDIR):
+	mkdir $@
+
 clean:
-	@rm -rf $(DESTDIR)
+	rm -rf $(DESTDIR)
