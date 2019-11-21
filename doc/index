@@ -1,6 +1,4 @@
 :description: Ada Networking Library
-:iconfont-remote!:
-:icons: font
 :sectanchors:
 :source-highlighter: pygments
 :stylesdir: css
