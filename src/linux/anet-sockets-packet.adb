@@ -32,9 +32,10 @@ package body Anet.Sockets.Packet is
    package C renames Interfaces.C;
 
    Protocols : constant array (Protocol_Type) of Double_Byte
-     := (Proto_Packet_Arp => Constants.ETH_P_ARP,
-         Proto_Packet_Ip  => Constants.ETH_P_IP,
-         Proto_Packet_All => Constants.ETH_P_ALL);
+     := (Proto_Packet_Arp  => Constants.ETH_P_ARP,
+         Proto_Packet_Ip   => Constants.ETH_P_IP,
+         Proto_Packet_Lldp => Constants.ETH_P_LLDP,
+         Proto_Packet_All  => Constants.ETH_P_ALL);
    --  Packet protocol mapping.
 
    -------------------------------------------------------------------------

@@ -28,6 +28,7 @@ package Anet.Sockets.Packet is
    type Protocol_Type is
      (Proto_Packet_Arp,
       Proto_Packet_Ip,
+      Proto_Packet_Lldp,
       Proto_Packet_All);
    --  Packet protocols.
 
