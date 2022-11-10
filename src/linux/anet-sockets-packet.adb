@@ -25,6 +25,7 @@ with Anet.Errno;
 with Anet.Sockets.Net_Ifaces;
 with Anet.Sockets.Thin.Packet;
 with Anet.Constants;
+with Anet.OS_Constants;
 with Anet.Byte_Swapping;
 
 package body Anet.Sockets.Packet is
@@ -37,6 +38,18 @@ package body Anet.Sockets.Packet is
          Proto_Packet_Lldp => Constants.ETH_P_LLDP,
          Proto_Packet_All  => Constants.ETH_P_ALL);
    --  Packet protocol mapping.
+
+   Membership_Actions : constant array (Membership_Action) of Interfaces.C.int
+     := (Add_Membership  => OS_Constants.PACKET_ADD_MEMBERSHIP,
+         Drop_Membership => OS_Constants.PACKET_DROP_MEMBERSHIP);
+   --  Packet socket membership binding action mapping.
+
+   Membership_Types : constant array (Membership_Type)
+     of Interfaces.C.unsigned_short
+     := (Multicast   => OS_Constants.PACKET_MR_MULTICAST,
+         Promiscuity => OS_Constants.PACKET_MR_PROMISC,
+         Allmulti    => OS_Constants.PACKET_MR_ALLMULTI);
+   --  Packet socket membership binding type mapping.
 
    -------------------------------------------------------------------------
 
@@ -163,5 +176,31 @@ package body Anet.Sockets.Packet is
          Error_Msg => "Incomplete packet send operation to " &
            To_String (Address => To));
    end Send;
+
+   procedure Set_Membership
+     (Socket : Raw_Socket_Type;
+      Iface  : Types.Iface_Name_Type;
+      Mrtype : Membership_Type;
+      Action : Membership_Action;
+      Addr   : Ether_Addr_Type)
+   is
+      use type Interfaces.C.unsigned_long;
+      Mreq : Thin.Packet.Packet_Mreq_Type;
+   begin
+      Mreq.Mr_Ifindex := C.int (Net_Ifaces.Get_Iface_Index (Name => Iface));
+      Mreq.Mr_Type    := Membership_Types (Mrtype);
+      Mreq.Mr_Alen    := C.unsigned_short (Addr'Length);
+      Mreq.Mr_Address (1 .. Addr'Length) := Addr;
+
+      Errno.Check_Or_Raise
+        (Result  => Thin.C_Setsockopt
+           (S       => Socket.Sock_FD,
+            Level   => C.int (OS_Constants.SOL_PACKET),
+            Optname => Membership_Actions (Action),
+            Optval  => Mreq'Address,
+            Optlen  => Mreq'Size / 8),
+         Message => "Unable to set Multicast membership on interface " &
+           String (Iface) & " for address " & To_String (Address => Addr));
+   end Set_Membership;
 
 end Anet.Sockets.Packet;

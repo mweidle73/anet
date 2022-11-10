@@ -43,4 +43,18 @@ package Anet.Sockets.Thin.Packet is
    pragma Convention (C, Sockaddr_Ll_Type);
    --  Device independent physical layer address
 
+   type Packet_Mreq_Type is record
+      Mr_Ifindex  : Interfaces.C.int            := 0;
+      --  Interface index/number
+      Mr_Type     : Interfaces.C.unsigned_short := 0;
+      --  Action to be performed (PACKET_MR_PROMISC, PACKET_MR_MULTICAST,
+      --  PACKET_MR_ALLMULTI)
+      Mr_Alen     : Interfaces.C.unsigned_short := 0;
+      --  Length of address field
+      Mr_Address  : Hardware_Addr_Type (1 .. 8) := (others => 0);
+      --  Physical layer address
+   end record;
+   pragma Convention (C, Packet_Mreq_Type);
+   --  Physical layer multicast configuration type
+
 end Anet.Sockets.Thin.Packet;

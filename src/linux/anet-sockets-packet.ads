@@ -32,6 +32,17 @@ package Anet.Sockets.Packet is
       Proto_Packet_All);
    --  Packet protocols.
 
+   type Membership_Action is
+     (Add_Membership,
+      Drop_Membership);
+   --  Packet membership acions.
+
+   type Membership_Type is
+     (Multicast,
+      Promiscuity,
+      Allmulti);
+   --  Packet membership types.
+
    type Packet_Socket_Type is abstract new Socket_Type with private;
    --  Packet socket.
 
@@ -75,6 +86,14 @@ package Anet.Sockets.Packet is
      (Socket   : in out Raw_Socket_Type;
       Protocol :        Protocol_Type := Proto_Packet_All);
    --  Initialize given Packet/Raw socket.
+
+   procedure Set_Membership
+     (Socket : Raw_Socket_Type;
+      Iface  : Types.Iface_Name_Type;
+      Mrtype : Membership_Type;
+      Action : Membership_Action;
+      Addr   : Ether_Addr_Type);
+   --  Set membership to configure multicast behavior of packet sockets.
 
 private
 
