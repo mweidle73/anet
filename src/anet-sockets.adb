@@ -285,6 +285,27 @@ package body Anet.Sockets is
 
    -------------------------------------------------------------------------
 
+   procedure Set_Socket_Option
+     (Socket : Socket_Type;
+      Level  : Level_Type := Socket_Level;
+      Option : Option_Name_Int;
+      Value  : Integer)
+   is
+      Val : constant C.int := C.int (Value);
+   begin
+      Errno.Check_Or_Raise
+        (Result  => Thin.C_Setsockopt
+           (S       => Socket.Sock_FD,
+            Level   => Levels (Level),
+            Optname => Options_Int (Option),
+            Optval  => Val'Address,
+            Optlen  => Val'Size / 8),
+         Message => "Unable set integer socket option " & Option'Img & " to " &
+           Value'Img);
+   end Set_Socket_Option;
+
+   -------------------------------------------------------------------------
+
    procedure Shutdown
      (Socket : Socket_Type;
       Method : Sock_Shutdown_Cmd)

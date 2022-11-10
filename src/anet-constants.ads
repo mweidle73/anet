@@ -52,6 +52,7 @@ package Anet.Constants is
    -- Socket operations --
    -----------------------
 
+   SO_PRIORITY       : constant := 12;       --  Socket priority for packets
    SO_BINDTODEVICE   : constant := 25;       --  Bind to interface device
    SO_ATTACH_FILTER  : constant := 26;       --  Socket filtering
 

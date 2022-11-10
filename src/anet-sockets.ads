@@ -121,6 +121,9 @@ package Anet.Sockets is
    type Option_Name_Str is (Bind_To_Device);
    --  Supported string based socket options.
 
+   type Option_Name_Int is (Priority);
+   --  Supported integer based socket options.
+
    procedure Set_Socket_Option
      (Socket : Socket_Type;
       Level  : Level_Type := Socket_Level;
@@ -135,6 +138,14 @@ package Anet.Sockets is
       Option : Option_Name_Str;
       Value  : String);
    --  Set socket option of given socket to specified string value. The level
+   --  argument specifies the protocol level this option applies to.
+
+   procedure Set_Socket_Option
+     (Socket : Socket_Type;
+      Level  : Level_Type := Socket_Level;
+      Option : Option_Name_Int;
+      Value  : Integer);
+   --  Set socket option of given socket to specified integer value. The level
    --  argument specifies the protocol level this option applies to.
 
 private
@@ -163,6 +174,10 @@ private
    Options_Str : constant array (Option_Name_Str) of Interfaces.C.int
      := (Bind_To_Device => Constants.SO_BINDTODEVICE);
    --  Mapping for option names with string value.
+
+   Options_Int : constant array (Option_Name_Int) of Interfaces.C.int
+     := (Priority => Constants.SO_PRIORITY);
+   --  Mapping for option names with integer value.
 
    Shutdown_Methods : constant array (Sock_Shutdown_Cmd) of Interfaces.C.int
      := (Block_Reception         => Constants.Sys.SHUT_RD,
