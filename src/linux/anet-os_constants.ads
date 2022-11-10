@@ -41,6 +41,7 @@ package Anet.OS_Constants is
 
    O_NONBLOCK             : constant := 4000; --  Non-blocking sockets
 
+   PACKET_ORIGDEV         : constant := 9;    --  Original device index
    PACKET_MR_MULTICAST    : constant := 0;    --  Bind multicast group
    PACKET_MR_PROMISC      : constant := 1;    --  Receive all packets
    PACKET_MR_ALLMULTI     : constant := 2;    --  Receive all multicast packets

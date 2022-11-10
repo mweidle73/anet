@@ -51,6 +51,10 @@ package body Anet.Sockets.Packet is
          Allmulti    => OS_Constants.PACKET_MR_ALLMULTI);
    --  Packet socket membership binding type mapping.
 
+   Packet_Options_Int : constant array (Packet_Option_Int) of Interfaces.C.int
+     := (Origdev => OS_Constants.PACKET_ORIGDEV);
+   --  Mapping for option names with integer value.
+
    -------------------------------------------------------------------------
 
    procedure Bind
@@ -177,6 +181,8 @@ package body Anet.Sockets.Packet is
            To_String (Address => To));
    end Send;
 
+   -------------------------------------------------------------------------
+
    procedure Set_Membership
      (Socket : Raw_Socket_Type;
       Iface  : Types.Iface_Name_Type;
@@ -202,5 +208,26 @@ package body Anet.Sockets.Packet is
          Message => "Unable to set Multicast membership on interface " &
            String (Iface) & " for address " & To_String (Address => Addr));
    end Set_Membership;
+
+   -------------------------------------------------------------------------
+
+   procedure Set_Socket_Option
+     (Socket : Raw_Socket_Type;
+      Option : Packet_Option_Int;
+      Value  : Integer)
+   is
+      use type Interfaces.C.unsigned_long;
+      Val : constant C.int := C.int (Value);
+   begin
+      Errno.Check_Or_Raise
+        (Result  => Thin.C_Setsockopt
+           (S       => Socket.Sock_FD,
+            Level   => C.int (OS_Constants.SOL_PACKET),
+            Optname => Packet_Options_Int (Option),
+            Optval  => Val'Address,
+            Optlen  => Val'Size / 8),
+         Message => "Unable set integer socket option " & Option'Img & " to " &
+           Value'Img);
+   end Set_Socket_Option;
 
 end Anet.Sockets.Packet;

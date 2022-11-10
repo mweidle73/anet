@@ -43,6 +43,10 @@ package Anet.Sockets.Packet is
       Allmulti);
    --  Packet membership types.
 
+   type Packet_Option_Int is
+     (Origdev);
+   --  Supported integer packet level options.
+
    type Packet_Socket_Type is abstract new Socket_Type with private;
    --  Packet socket.
 
@@ -94,6 +98,13 @@ package Anet.Sockets.Packet is
       Action : Membership_Action;
       Addr   : Ether_Addr_Type);
    --  Set membership to configure multicast behavior of packet sockets.
+
+   procedure Set_Socket_Option
+     (Socket : Raw_Socket_Type;
+      Option : Packet_Option_Int;
+      Value  : Integer);
+   --  Set socket option of given socket to specified integer value
+   --  on packet level.
 
 private
 
