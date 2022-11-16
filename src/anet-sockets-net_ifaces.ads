@@ -25,6 +25,11 @@ with Anet.Types;
 
 package Anet.Sockets.Net_Ifaces is
 
+   function Get_Iface_Flags
+     (Name : Types.Iface_Name_Type)
+      return Short_Integer;
+   --  Gets the current interface flags of the interface.
+
    function Get_Iface_Index (Name : Types.Iface_Name_Type) return Positive;
    --  Get interface index of interface given by name.
 

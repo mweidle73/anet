@@ -52,6 +52,19 @@ package body Anet.Sockets.Net_Ifaces is
 
    -------------------------------------------------------------------------
 
+   function Get_Iface_Flags
+     (Name : Types.Iface_Name_Type)
+      return Short_Integer
+   is
+      Req : constant If_Req_Type := Query_Iface
+        (Iface_Name => Name,
+         Request    => If_Flags);
+   begin
+      return Short_Integer (Req.Ifr_Flags);
+   end Get_Iface_Flags;
+
+   -------------------------------------------------------------------------
+
    function Get_Iface_Index (Name : Types.Iface_Name_Type) return Positive
    is
       Req : constant If_Req_Type := Query_Iface

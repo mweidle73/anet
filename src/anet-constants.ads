@@ -61,6 +61,21 @@ package Anet.Constants is
    ---------------------
 
    IFF_UP            : constant := 1;        --  Interface is up
+   IFF_BROADCAST     : constant := 2;        --  Valid broadcast address set
+   IFF_DEBUG         : constant := 4;        --  Internal debug flag
+   IFF_LOOPBACK      : constant := 8;        --  Loopback device
+   IFF_POINTOPOINT   : constant := 16;       --  Interface is p2p link
+   IFF_NOTRAILERS    : constant := 32;       --  Avoid use of trailers
+   IFF_RUNNING       : constant := 64;       --  Interface resources allocated
+   IFF_NOARP         : constant := 128;      --  No address resolution
+   IFF_PROMISC       : constant := 256;      --  Promiscuous mode
+   IFF_ALLMULTI      : constant := 512;      --  Receive all multicast packets
+   IFF_MASTER        : constant := 1024;     --  Master of load balancing
+   IFF_SLAVE         : constant := 2048;     --  Slave of load balancing
+   IFF_MULTICAST     : constant := 4096;     --  Multicast supported
+   IFF_PORTSEL       : constant := 8192;     --  Can select media type (ifmap)
+   IFF_AUTOMEDIA     : constant := 16384;    --  Auto media selection active
+   IFF_DYNAMIC       : constant := 32768;    --  If down -> addresses lost
 
    ---------------------------
    -- Ethernet protocol IDs --
