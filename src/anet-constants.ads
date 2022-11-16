@@ -91,5 +91,6 @@ package Anet.Constants is
    ---------------------
 
    IFNAMSIZ          : constant := 16;
+   VLANNAMSIZ        : constant := 24;
 
 end Anet.Constants;

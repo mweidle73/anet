@@ -51,4 +51,6 @@ package Anet.OS_Constants is
    PACKET_DROP_MEMBERSHIP : constant := 2;    --  Drop a multicast binding
 
    SOL_PACKET             : constant := 263;  --  Packet level options
+
+   GET_VLAN_REALDEV_NAME_CMD : constant := 8; --  Actual device name
 end Anet.OS_Constants;

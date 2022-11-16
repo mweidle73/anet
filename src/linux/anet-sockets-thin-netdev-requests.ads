@@ -27,6 +27,7 @@ package Anet.Sockets.Thin.Netdev.Requests is
    SIOCSIFFLAGS  : constant := 16#8914#; --  Set flags
    SIOCGIFHWADDR : constant := 16#8927#; --  Get hardware address
    SIOCGIFINDEX  : constant := 16#8933#; --  Name -> if_index mapping
+   SIOCGIFVLAN   : constant := 16#8982#; --  802.1 VLAN support
 
    Get_Requests : constant array (Netdev_Request_Name) of Interfaces.C.int
      := (If_Addr   => SIOCGIFADDR,
@@ -40,11 +41,29 @@ package Anet.Sockets.Thin.Netdev.Requests is
          others   => Interfaces.C.int (-1));
    --  Currently supported netdevice ioctl set requests.
 
+   type Vlan_Ioctl_Args is record
+      Cmd      : Interfaces.C.int;
+      Device1  : Interfaces.C.char_array
+        (1 .. Constants.VLANNAMSIZ) := (others => Interfaces.C.nul);
+      Device2  : Interfaces.C.char_array
+        (1 .. Constants.VLANNAMSIZ) := (others => Interfaces.C.nul);
+      Vlan_QOS : Interfaces.C.short := 0;
+   end record;
+   pragma Convention (C, Vlan_Ioctl_Args);
+   --  Vlan ioctl request structure (incomplete struct vlan_ioctl_args).
+
    function C_Ioctl
      (S   : Interfaces.C.int;
       Req : Interfaces.C.int;
       Arg : access If_Req_Type)
       return Interfaces.C.int;
    pragma Import (C, C_Ioctl, "ioctl");
+
+   function C_Ioctl_Vlan
+     (S   : Interfaces.C.int;
+      Req : Interfaces.C.int;
+      Arg : access Vlan_Ioctl_Args)
+      return Interfaces.C.int;
+   pragma Import (C, C_Ioctl_Vlan, "ioctl");
 
 end Anet.Sockets.Thin.Netdev.Requests;
