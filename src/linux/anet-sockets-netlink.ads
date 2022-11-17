@@ -38,7 +38,7 @@ package Anet.Sockets.Netlink is
       Proto_Netlink_Crypto);
    --  Netlink protocols.
 
-   type Group_Type is
+   type Xfrm_Group_Type is
      (Group_Xfrm_None,
       Group_Xfrm_Acquire,
       Group_Xfrm_Expire,
@@ -48,12 +48,52 @@ package Anet.Sockets.Netlink is
       Group_Xfrm_Report,
       Group_Xfrm_Migrate,
       Group_Xfrm_Mapping);
-   --  Supported Netlink multicast groups.
+   --  Supported XFRM Netlink multicast groups.
 
-   type Group_Array is array (Positive range <>) of Group_Type;
-   --  Array of Netlink multicast groups.
+   type Rtnl_Group_Type is
+     (Group_Rtnl_None,
+      Group_Rtnl_Link,
+      Group_Rtnl_Notify,
+      Group_Rtnl_Neigh,
+      Group_Rtnl_TC,
+      Group_Rtnl_IPV4_Ifaddr,
+      Group_Rtnl_IPV4_MRoute,
+      Group_Rtnl_IPV4_Route,
+      Group_Rtnl_IPV4_Rule,
+      Group_Rtnl_IPV6_Ifaddr,
+      Group_Rtnl_IPV6_MRoute,
+      Group_Rtnl_IPV6_Route,
+      Group_Rtnl_IPV6_Ifinfo,
+      Group_Rtnl_Decnet_Ifaddr,
+      Group_Rtnl_Nop2,
+      Group_Rtnl_Decnet_Route,
+      Group_Rtnl_Decnet_Rule,
+      Group_Rtnl_Nop4,
+      Group_Rtnl_IPV6_Prefix,
+      Group_Rtnl_IPV6_Rule,
+      Group_Rtnl_Nd_Useropt,
+      Group_Rtnl_Phonet_Ifaddr,
+      Group_Rtnl_Phonet_Route,
+      Group_Rtnl_Dcb,
+      Group_Rtnl_IPV4_Netconf,
+      Group_Rtnl_IPV6_Netconf,
+      Group_Rtnl_Mdb,
+      Group_Rtnl_Mpls_Route,
+      Group_Rtnl_Nsid,
+      Group_Rtnl_Mpls_Netconf,
+      Group_Rtnl_IPV4_MRoute_R,
+      Group_Rtnl_IPV6_MRoute_R,
+      Group_Rtnl_Nexthop,
+      Group_Rtnl_Brvlan);
+   --  Supported RT Netlink multicast groups.
 
-   No_Groups : constant Group_Array;
+   type Xfrm_Group_Array is array (Positive range <>) of Xfrm_Group_Type;
+   --  Array of XFRM Netlink multicast groups.
+
+   type Rtnl_Group_Array is array (Positive range <>) of Rtnl_Group_Type;
+   --  Array of RT Netlink multicast groups.
+
+   Xfrm_No_Groups : constant Xfrm_Group_Array;
 
    type Netlink_Socket_Type is abstract new Socket_Type with private;
    --  Netlink socket.
@@ -61,9 +101,15 @@ package Anet.Sockets.Netlink is
    procedure Bind
      (Socket  : in out Netlink_Socket_Type;
       Address :        Netlink_Addr_Type;
-      Groups  :        Group_Array := No_Groups);
+      Groups  :        Xfrm_Group_Array := Xfrm_No_Groups);
    --  Bind given Netlink socket to the specified Netlink address (which is
-   --  normally the pid of the application) and optional Netlink multicast
+   --  normally the pid of the application) and optional XFRM Netlink multicast
+   --  groups (requires root permissions).
+
+   procedure Bind
+     (Socket  : in out Netlink_Socket_Type;
+      Groups  :        Rtnl_Group_Array);
+   --  Bind given Netlink socket to the specified RT Netlink multicast
    --  groups (requires root permissions).
 
    procedure Send
@@ -95,7 +141,11 @@ package Anet.Sockets.Netlink is
 
 private
 
-   No_Groups : constant Group_Array (1 .. 1) := (1 => Group_Xfrm_None);
+   Xfrm_No_Groups : constant Xfrm_Group_Array (1 .. 1) :=
+     (1 => Group_Xfrm_None);
+
+   Rtnl_No_Groups : constant Rtnl_Group_Array (1 .. 1) :=
+     (1 => Group_Rtnl_None);
 
    type Netlink_Socket_Type is abstract new Socket_Type with null record;
 

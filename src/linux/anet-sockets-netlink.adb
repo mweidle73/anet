@@ -46,7 +46,7 @@ package body Anet.Sockets.Netlink is
    procedure Bind
      (Socket  : in out Netlink_Socket_Type;
       Address :        Netlink_Addr_Type;
-      Groups  :        Group_Array := No_Groups)
+      Groups  :        Xfrm_Group_Array := Xfrm_No_Groups)
    is
       use type Interfaces.Unsigned_32;
       use type Interfaces.C.unsigned_long;
@@ -55,12 +55,40 @@ package body Anet.Sockets.Netlink is
         := (Nl_Pid => Interfaces.Unsigned_32 (Address),
             others => <>);
    begin
-      if Groups /= No_Groups then
+      if Groups /= Xfrm_No_Groups then
          for G in Groups'Range loop
             Value.Nl_Groups := Value.Nl_Groups
               or Interfaces.Shift_Left
                 (Value  => 1,
-                 Amount => Natural (Group_Type'Pos (Groups (G)) - 1));
+                 Amount => Natural (Xfrm_Group_Type'Pos (Groups (G)) - 1));
+         end loop;
+      end if;
+
+      Errno.Check_Or_Raise
+        (Result  => Thin.C_Bind
+           (S       => Socket.Sock_FD,
+            Name    => Value'Address,
+            Namelen => Value'Size / 8),
+         Message => "Unable to bind Netlink socket");
+   end Bind;
+
+   -------------------------------------------------------------------------
+
+   procedure Bind
+     (Socket  : in out Netlink_Socket_Type;
+      Groups  :        Rtnl_Group_Array)
+   is
+      use type Interfaces.Unsigned_32;
+      use type Interfaces.C.unsigned_long;
+
+      Value : Thin.Netlink.Sockaddr_Nl_Type := (others => <>);
+   begin
+      if Groups /= Rtnl_No_Groups then
+         for G in Groups'Range loop
+            Value.Nl_Groups := Value.Nl_Groups
+              or Interfaces.Shift_Left
+                (Value  => 1,
+                 Amount => Natural (Rtnl_Group_Type'Pos (Groups (G)) - 1));
          end loop;
       end if;
 
