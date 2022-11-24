@@ -28,7 +28,8 @@ package Anet.Sockets.Thin.Netdev is
      (If_Addr,
       If_Flags,
       If_Hwaddr,
-      If_Index);
+      If_Index,
+      If_Mtu);
    --  Supported netdevice requests.
 
    type If_Req_Type (Name : Netdev_Request_Name := If_Index) is record
@@ -44,6 +45,8 @@ package Anet.Sockets.Thin.Netdev is
             Ifr_Ifindex : Interfaces.C.int   := 0;
          when If_Flags  =>
             Ifr_Flags   : Interfaces.C.short := 0;
+         when If_Mtu    =>
+            Ifr_Mtu     : Interfaces.C.int   := 0;
       end case;
    end record;
    pragma Unchecked_Union (If_Req_Type);

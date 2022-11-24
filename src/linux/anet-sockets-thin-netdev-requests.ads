@@ -28,12 +28,14 @@ package Anet.Sockets.Thin.Netdev.Requests is
    SIOCGIFHWADDR : constant := 16#8927#; --  Get hardware address
    SIOCGIFINDEX  : constant := 16#8933#; --  Name -> if_index mapping
    SIOCGIFVLAN   : constant := 16#8982#; --  802.1 VLAN support
+   SIOCGIFMTU    : constant := 16#8921#; --  Get MTU
 
    Get_Requests : constant array (Netdev_Request_Name) of Interfaces.C.int
      := (If_Addr   => SIOCGIFADDR,
          If_Flags  => SIOCGIFFLAGS,
          If_Hwaddr => SIOCGIFHWADDR,
-         If_Index  => SIOCGIFINDEX);
+         If_Index  => SIOCGIFINDEX,
+         If_Mtu    => SIOCGIFMTU);
    --  Currently supported netdevice ioctl get requests.
 
    Set_Requests : constant array (Netdev_Request_Name) of Interfaces.C.int

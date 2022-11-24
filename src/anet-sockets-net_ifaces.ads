@@ -38,6 +38,11 @@ package Anet.Sockets.Net_Ifaces is
       return Hardware_Addr_Type;
    --  Get hardware address of interface given by name.
 
+   function Get_Iface_Mtu
+     (Name : Types.Iface_Name_Type)
+      return Positive;
+   --  Get the MTU of the interface given by name.
+
    function Get_Iface_IP
      (Name : Types.Iface_Name_Type)
       return IPv4_Addr_Type;

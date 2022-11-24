@@ -119,6 +119,19 @@ package body Anet.Sockets.Net_Ifaces is
 
    -------------------------------------------------------------------------
 
+   function Get_Iface_Mtu
+     (Name : Types.Iface_Name_Type)
+      return Positive
+   is
+      Req : constant If_Req_Type := Query_Iface
+        (Iface_Name => Name,
+         Request    => If_Mtu);
+   begin
+      return Positive (Req.Ifr_Mtu);
+   end Get_Iface_Mtu;
+
+   -------------------------------------------------------------------------
+
    function Ioctl_Get
      (Socket     : C.int;
       Request    : Netdev_Request_Name;

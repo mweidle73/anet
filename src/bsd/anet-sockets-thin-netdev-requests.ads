@@ -27,13 +27,15 @@ package Anet.Sockets.Thin.Netdev.Requests is
    SIOCSIFFLAGS  : constant := 16#80206910#; --  Set flags
    SIOCGIFHWADDR : constant := 16#ffffffff#; --  Get hardware address
    SIOCGIFINDEX  : constant := 16#c0206920#; --  Name -> if_index mapping
+   SIOCGIFMTU    : constant := 16#c0206933#; --  Get MTU
 
    Get_Requests : constant array (Netdev_Request_Name) of
      Interfaces.C.unsigned_long
        := (If_Addr   => SIOCGIFADDR,
            If_Flags  => SIOCGIFFLAGS,
            If_Hwaddr => SIOCGIFHWADDR,
-           If_Index  => SIOCGIFINDEX);
+           If_Index  => SIOCGIFINDEX,
+           If_Mtu    => SIOCGIFMTU);
    --  Currently supported netdevice ioctl get requests.
 
    Set_Requests : constant array (Netdev_Request_Name) of
