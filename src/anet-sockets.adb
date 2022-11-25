@@ -126,6 +126,11 @@ package body Anet.Sockets is
 
    -------------------------------------------------------------------------
 
+   function Get_Socket (Socket : Socket_Type) return Interfaces.C.int
+   is (Socket.Sock_FD);
+
+   -------------------------------------------------------------------------
+
    procedure Init
      (Socket   : in out Socket_Type;
       Family   :        Socket_Families.Family_Type;

@@ -49,6 +49,9 @@ package Anet.Sockets is
    type Socket_Type is abstract tagged limited private;
    --  Communication socket.
 
+   function Get_Socket (Socket : Socket_Type) return Interfaces.C.int;
+   --  Returns the raw socket file descriptor.
+
    procedure Close (Socket : in out Socket_Type);
    --  Close given socket.
 
