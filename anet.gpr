@@ -23,7 +23,7 @@
 
 with "anet_common";
 
-library project Anet_Lib is
+library project Anet is
 
    for Source_Dirs use
      ("src",
@@ -40,4 +40,4 @@ library project Anet_Lib is
         & ("-gnatwale") & Anet_Common.Adaflags;
    end Compiler;
 
-end Anet_Lib;
+end Anet;

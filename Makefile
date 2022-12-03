@@ -3,8 +3,6 @@ TESTDIR   = tests
 OBJDIR    = obj/$(OS)
 COVDIR    = $(OBJDIR)/coverage
 LIBDIR    = lib
-SRCDIR    = src
-GPR_FILES = gnat/*.gpr
 
 MAJOR    = 0
 MINOR    = 4
@@ -13,14 +11,7 @@ VERSION  = $(MAJOR).$(MINOR).$(REVISION)
 ANET     = libanet-$(VERSION)
 TARBALL  = $(ANET).tar.bz2
 
-SO_LIBRARY   = libanet.so.$(VERSION)
 LIBRARY_KIND = dynamic
-
-# Command variables
-INSTALL         = install
-INSTALL_PROGRAM = $(INSTALL)
-INSTALL_DATA    = $(INSTALL) --mode=644 --preserve-timestamps
-INSTALL_ALI     = $(INSTALL) --mode=444
 
 OS ?= linux
 
@@ -33,17 +24,23 @@ GNAT_BUILDER_FLAGS ?= -R -j$(NUM_CPUS)
 GMAKE_OPTS = -p ${GNAT_BUILDER_FLAGS} \
   $(foreach v,ADAFLAGS LDFLAGS OS VERSION,'-X$(v)=$($(v))')
 
-# GNU-style directory variables
-prefix      = ${PREFIX}
-exec_prefix = ${prefix}
-includedir  = ${prefix}/include
-libdir      = ${exec_prefix}/lib
-gprdir      = ${prefix}/lib/gnat
+# This variable explicitly exists for override by people with a
+# different directory hierarchy.
+# exec is unrelated and currently only used by tests
+GPRINSTALLFLAGS := \
+  --prefix=$(DESTDIR)$(PREFIX) \
+  --no-manifest \
+  --exec-subdir=tests \
+  --ali-subdir=lib/anet \
+  --lib-subdir=lib \
+  --project-subdir=lib/gnat \
+  --sources-subdir=include/anet \
+  # EOL
 
 all: build_lib
 
 build_lib:
-	gprbuild $(GMAKE_OPTS) anet_lib.gpr -XLIBRARY_KIND=$(LIBRARY_KIND)
+	gprbuild $(GMAKE_OPTS) anet.gpr -XLIBRARY_KIND=$(LIBRARY_KIND)
 
 build_tests:
 	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XLIBRARY_KIND=static -XBUILD=tests
@@ -64,28 +61,14 @@ cov:
 examples:
 	gprbuild $(GMAKE_OPTS) anet_examples.gpr -XLIBRARY_KIND=static
 
-install: install_lib install_$(LIBRARY_KIND)
-
-install_lib: build_lib
-	$(INSTALL) -d $(DESTDIR)$(gprdir)
-	$(INSTALL) -d $(DESTDIR)$(libdir)/anet
-	$(INSTALL) -d $(DESTDIR)$(includedir)/anet
-	$(INSTALL_DATA) $(SRCDIR)/*.ad[bs] $(DESTDIR)$(includedir)/anet
-	$(INSTALL_DATA) $(SRCDIR)/$(OS)/*.ad[bs] $(DESTDIR)$(includedir)/anet
-	$(INSTALL_ALI) $(LIBDIR)/$(OS)/$(LIBRARY_KIND)/*.ali $(DESTDIR)$(libdir)/anet
-	$(INSTALL_DATA) $(GPR_FILES) $(DESTDIR)$(gprdir)
-
-install_static:
-	$(INSTALL_DATA) $(LIBDIR)/$(OS)/$(LIBRARY_KIND)/libanet.a $(DESTDIR)$(libdir)
-
-install_dynamic:
-	$(INSTALL_PROGRAM) $(LIBDIR)/$(OS)/$(LIBRARY_KIND)/$(SO_LIBRARY) $(DESTDIR)$(libdir)
-	cd $(DESTDIR)$(libdir) && ln -sf $(SO_LIBRARY) libanet.so
+install: build_lib
+	gprinstall -Panet.gpr -f -p $(GPRINSTALLFLAGS) \
+	  -XVERSION=$(VERSION) -XOS=$(OS) -XLIBRARY_KIND=$(LIBRARY_KIND)
 
 install_tests: build_tests
-	$(INSTALL) -v -d $(DESTDIR)$(prefix)/$(TESTDIR)
-	$(INSTALL_PROGRAM) $(OBJDIR)/$(TESTDIR)/test_runner $(DESTDIR)$(prefix)/$(TESTDIR)
-	cp -r data $(DESTDIR)$(prefix)/$(TESTDIR)
+	gprinstall -Panet_tests.gpr -f -p $(GPRINSTALLFLAGS) \
+	  -XVERSION= -XBUILD=tests -XOS=$(OS) -XLIBRARY_KIND=static
+	cp -r data $(DESTDIR)$(PREFIX)/$(TESTDIR)
 
 doc:
 	$(MAKE) -C doc

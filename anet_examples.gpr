@@ -22,7 +22,7 @@
 --
 
 with "anet_common";
-with "anet_lib";
+with "anet";
 
 standard project Anet_Examples is
 
