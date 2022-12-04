@@ -69,16 +69,14 @@ install-tests: build-tests
 	  -XVERSION= -XBUILD=tests -XOS=$(OS)
 	cp -r data $(DESTDIR)$(PREFIX)/$(TESTDIR)
 
-doc:
-	$(MAKE) -C doc
-
 clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(LIBDIR)
-	$(MAKE) -C doc clean
 
 dist:
 	@echo "Creating release tarball $(TARBALL) ... "
 	git archive --format=tar HEAD --prefix $(ANET)/ | bzip2 > $(TARBALL)
 
-.PHONY: doc tests
+.PHONY: tests
+
+include doc/doc.mk
