@@ -7,11 +7,10 @@ LIBDIR    = lib
 MAJOR    = 0
 MINOR    = 4
 REVISION = 2
+# Set VERSION to '' for a static library.
 VERSION  = $(MAJOR).$(MINOR).$(REVISION)
 ANET     = libanet-$(VERSION)
 TARBALL  = $(ANET).tar.bz2
-
-LIBRARY_KIND = dynamic
 
 OS ?= linux
 
@@ -22,7 +21,7 @@ NUM_CPUS ?= 1
 GNAT_BUILDER_FLAGS ?= -R -j$(NUM_CPUS)
 # GMAKE_OPTS should not be overridden because -p is essential.
 GMAKE_OPTS = -p ${GNAT_BUILDER_FLAGS} \
-  $(foreach v,ADAFLAGS LDFLAGS OS VERSION,'-X$(v)=$($(v))')
+  $(foreach v,ADAFLAGS LDFLAGS OS,'-X$(v)=$($(v))')
 
 # This variable explicitly exists for override by people with a
 # different directory hierarchy.
@@ -40,10 +39,10 @@ GPRINSTALLFLAGS := \
 all: build_lib
 
 build_lib:
-	gprbuild $(GMAKE_OPTS) anet.gpr -XLIBRARY_KIND=$(LIBRARY_KIND)
+	gprbuild $(GMAKE_OPTS) anet.gpr -XVERSION=$(VERSION)
 
 build_tests:
-	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XLIBRARY_KIND=static -XBUILD=tests
+	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XVERSION= -XBUILD=tests
 
 tests: build_tests
 	$(OBJDIR)/$(TESTDIR)/test_runner
@@ -52,22 +51,22 @@ build_all: build_tests build_lib
 
 cov:
 	rm -f $(COVDIR)/*.gcda
-	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XLIBRARY_KIND=static -XBUILD=coverage
+	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XVERSION= -XBUILD=coverage
 	$(COVDIR)/test_runner || true
 	lcov -c -d $(COVDIR) -o $(COVDIR)/cov.info
 	lcov -e $(COVDIR)/cov.info "$(PWD)/src/*.adb" -o $(COVDIR)/cov.info
 	genhtml --no-branch-coverage $(COVDIR)/cov.info -o $(COVDIR)
 
 examples:
-	gprbuild $(GMAKE_OPTS) anet_examples.gpr -XLIBRARY_KIND=static
+	gprbuild $(GMAKE_OPTS) anet_examples.gpr -XVERSION=
 
 install: build_lib
 	gprinstall -Panet.gpr -f -p $(GPRINSTALLFLAGS) \
-	  -XVERSION=$(VERSION) -XOS=$(OS) -XLIBRARY_KIND=$(LIBRARY_KIND)
+	  -XVERSION=$(VERSION) -XOS=$(OS)
 
 install_tests: build_tests
 	gprinstall -Panet_tests.gpr -f -p $(GPRINSTALLFLAGS) \
-	  -XVERSION= -XBUILD=tests -XOS=$(OS) -XLIBRARY_KIND=static
+	  -XVERSION= -XBUILD=tests -XOS=$(OS)
 	cp -r data $(DESTDIR)$(PREFIX)/$(TESTDIR)
 
 doc:

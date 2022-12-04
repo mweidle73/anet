@@ -25,10 +25,8 @@ abstract project Anet_Common is
 
    for Source_Dirs use ();
 
+   --  Set Version to "" for a static library.
    Version := external ("VERSION");
-
-   type Lib_Type is ("static", "dynamic");
-   Libtype : Lib_Type := external ("LIBRARY_KIND");
 
    type OS_Type is ("linux", "bsd");
    OS : OS_Type := external ("OS");
