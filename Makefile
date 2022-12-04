@@ -36,18 +36,18 @@ GPRINSTALLFLAGS := \
   --sources-subdir=include/anet \
   # EOL
 
-all: build_lib
+all: build-lib
 
-build_lib:
+build-lib:
 	gprbuild $(GMAKE_OPTS) anet.gpr -XVERSION=$(VERSION)
 
-build_tests:
+build-tests:
 	gprbuild $(GMAKE_OPTS) anet_tests.gpr -XVERSION= -XBUILD=tests
 
-tests: build_tests
+tests: build-tests
 	$(OBJDIR)/$(TESTDIR)/test_runner
 
-build_all: build_tests build_lib
+build-all: build-tests build-lib
 
 cov:
 	rm -f $(COVDIR)/*.gcda
@@ -57,14 +57,14 @@ cov:
 	lcov -e $(COVDIR)/cov.info "$(PWD)/src/*.adb" -o $(COVDIR)/cov.info
 	genhtml --no-branch-coverage $(COVDIR)/cov.info -o $(COVDIR)
 
-examples:
+build-examples:
 	gprbuild $(GMAKE_OPTS) anet_examples.gpr -XVERSION=
 
-install: build_lib
+install: build-lib
 	gprinstall -Panet.gpr -f -p $(GPRINSTALLFLAGS) \
 	  -XVERSION=$(VERSION) -XOS=$(OS)
 
-install_tests: build_tests
+install-tests: build-tests
 	gprinstall -Panet_tests.gpr -f -p $(GPRINSTALLFLAGS) \
 	  -XVERSION= -XBUILD=tests -XOS=$(OS)
 	cp -r data $(DESTDIR)$(PREFIX)/$(TESTDIR)
@@ -81,4 +81,4 @@ dist:
 	@echo "Creating release tarball $(TARBALL) ... "
 	git archive --format=tar HEAD --prefix $(ANET)/ | bzip2 > $(TARBALL)
 
-.PHONY: doc examples tests
+.PHONY: doc tests
