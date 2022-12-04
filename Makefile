@@ -6,7 +6,7 @@ LIBDIR    = lib
 
 MAJOR    = 0
 MINOR    = 4
-REVISION = 2
+REVISION = 3
 # Set VERSION to '' for a static library.
 VERSION  = $(MAJOR).$(MINOR).$(REVISION)
 ANET     = libanet-$(VERSION)
