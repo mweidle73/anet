@@ -22,6 +22,7 @@
 --
 
 with Anet.Constants;
+with Ada.Containers.Indefinite_Vectors;
 
 package Anet.Types is
 
@@ -30,6 +31,10 @@ package Anet.Types is
 
    type Iface_Name_Type is array (Iface_Name_Range range <>) of Character;
    --  Interface name type.
+
+   package Iface_Name_Vector is new Ada.Containers.Indefinite_Vectors
+     (Index_Type => Natural, Element_Type => Iface_Name_Type);
+   --  Vector of interface names.
 
    function Is_Valid_Iface (Name : String) return Boolean;
    --  Returns true if the given name is a valid interface name.

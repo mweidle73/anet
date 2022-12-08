@@ -21,6 +21,8 @@
 --  executable file might be covered by the GNU Public License.
 --
 
+with Anet.Types;
+
 package Anet.OS is
 
    procedure Execute (Command : String);
@@ -36,6 +38,9 @@ package Anet.OS is
       Ignore_Missing : Boolean := True);
    --  Delete a file given by filename string. Ignore missing specifies if
    --  trying to delete a nonexistent file should raise an IO error exception.
+
+   function Get_Network_Interface_Names return Types.Iface_Name_Vector.Vector;
+   --  Returns a vector containing the names of all network interfaces.
 
    Command_Failed : exception;
    IO_Error       : exception;

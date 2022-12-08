@@ -23,6 +23,7 @@
 with System;
 
 with Interfaces.C.Strings;
+with Interfaces.C.Pointers;
 
 package Anet.Thin is
 
@@ -43,5 +44,29 @@ package Anet.Thin is
       Size : Interfaces.C.unsigned)
       return Interfaces.C.Strings.chars_ptr;
    pragma Import (C, C_Inet_Ntop, "inet_ntop");
+
+   type Name_Index is record
+      If_Index : Interfaces.C.unsigned;
+      If_Name  : Interfaces.C.Strings.chars_ptr;
+   end record;
+   pragma Convention (C, Name_Index);
+   --  Interface name type for if_nameindex function.
+
+   Name_Index_Null : constant Name_Index := (0, Interfaces.C.Strings.Null_Ptr);
+   --  Terminator of name index array.
+
+   type Name_Index_Array is array (Interfaces.C.int range <>)
+     of aliased Name_Index;
+   --  Array of name indices.
+
+   package Name_Index_Pointer is new Interfaces.C.Pointers
+     (Interfaces.C.int, Name_Index, Name_Index_Array, Name_Index_Null);
+   --  Pointer to name index (array).
+
+   function If_Name_Index return Name_Index_Pointer.Pointer;
+   pragma Import (C, If_Name_Index, "if_nameindex");
+
+   procedure If_Free_Index (N : Name_Index_Pointer.Pointer);
+   pragma Import (C, If_Free_Index, "if_freenameindex");
 
 end Anet.Thin;

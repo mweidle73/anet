@@ -27,11 +27,13 @@ with Ada.IO_Exceptions;
 
 with Interfaces.C;
 with Interfaces.C_Streams;
+with Interfaces.C.Strings;
 
 with GNAT.OS_Lib;
 
 with Anet.Errno;
 with Anet.Constants;
+with Anet.Thin;
 
 package body Anet.OS is
 
@@ -79,6 +81,30 @@ package body Anet.OS is
            "Execution of command '" & Command & "' failed";
       end if;
    end Execute;
+
+   -------------------------------------------------------------------------
+
+   function Get_Network_Interface_Names return Types.Iface_Name_Vector.Vector
+   is
+      use type Interfaces.C.unsigned;
+      use type Interfaces.C.Strings.chars_ptr;
+
+      P     : Thin.Name_Index_Pointer.Pointer          := Thin.If_Name_Index;
+      S     : constant Thin.Name_Index_Pointer.Pointer := P;
+      Index : Integer                                  := 1;
+      Names : Types.Iface_Name_Vector.Vector;
+   begin
+      loop
+         exit when P.If_Index = 0 and
+           P.If_Name = Interfaces.C.Strings.Null_Ptr;
+         Names.Append (Types.Iface_Name_Type
+                       (String'(Interfaces.C.Strings.Value (P.If_Name))));
+         Thin.Name_Index_Pointer.Increment (P);
+         Index := Index + 1;
+      end loop;
+      Thin.If_Free_Index (S);
+      return Names;
+   end Get_Network_Interface_Names;
 
    -------------------------------------------------------------------------
 
