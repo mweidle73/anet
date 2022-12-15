@@ -58,6 +58,10 @@ package body Socket_Tests.Packet is
       T.Add_Test_Routine
         (Routine => Send_Packet_Raw'Access,
          Name    => "Send data (raw)");
+
+      T.Add_Test_Routine
+        (Routine => Test_LLDP_Protocol'Access,
+         Name    => "Send LLDP frame");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -149,5 +153,66 @@ package body Socket_Tests.Packet is
          Rcvr.Stop;
          raise;
    end Send_Packet_Raw;
+
+   -------------------------------------------------------------------------
+
+   procedure Test_LLDP_Protocol
+   is
+      use type Receivers.Count_Type;
+      use Anet.Sockets.Packet;
+
+      C     : Receivers.Count_Type := 0;
+      Sock  : aliased Sockets.Packet.Raw_Socket_Type;
+      Rcvr  : Packet_Raw_Receiver.Receiver_Type (S => Sock'Access);
+      Chunk : constant Ada.Streams.Stream_Element_Array
+        := Anet.OS.Read_File (Filename => "data/chunk_lldp.dat");
+   begin
+      if not Test_Utils.Has_Root_Perms then
+         Skip (Message => "Run as root");
+      end if;
+
+      Sock.Init (Proto_Packet_Lldp);
+      Sock.Bind (Iface => Test_Constants.Loopback_Iface_Name);
+
+      Rcvr.Listen (Callback => Test_Utils.GNU_Linux.Dump'Access);
+
+      --  Precautionary delay to make sure receiver task is ready.
+
+      delay 0.2;
+
+      --  Send data chunk containing LLDP protocol frame.
+
+      Sock.Send (Item  => Chunk);
+
+      for I in 1 .. 30 loop
+         C := Rcvr.Get_Rcv_Msg_Count;
+         exit when C > 0;
+         delay 0.1;
+      end loop;
+
+      Rcvr.Stop;
+
+      Assert (Condition => C = 1,
+              Message   => "Message count not 1:" & C'Img);
+      Assert (Condition => Test_Utils.Get_Dump = Chunk,
+              Message   => "Result mismatch");
+
+      --  Send random data, should not be received.
+
+      Sock.Send (Item  => Ref_Chunk);
+
+      for I in 1 .. 30 loop
+         C := Rcvr.Get_Rcv_Msg_Count;
+         exit when C > 1;
+         delay 0.1;
+      end loop;
+
+      Assert (Condition => C = 1,
+              Message   => "Message count not 1:" & C'Img);
+   exception
+      when others =>
+         Rcvr.Stop;
+         raise;
+   end Test_LLDP_Protocol;
 
 end Socket_Tests.Packet;

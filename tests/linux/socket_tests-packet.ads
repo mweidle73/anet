@@ -35,4 +35,7 @@ package Socket_Tests.Packet is
    procedure Send_Packet_Raw;
    --  Test sending over a raw packet socket.
 
+   procedure Test_LLDP_Protocol;
+   --  Test sending data via LLDP protocol socket.
+
 end Socket_Tests.Packet;
