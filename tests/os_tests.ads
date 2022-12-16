@@ -39,4 +39,7 @@ package OS_Tests is
    procedure Execute_Error;
    --  Test execution error handling.
 
+   procedure Interface_Names;
+   --  Test get network interfaces names function.
+
 end OS_Tests;

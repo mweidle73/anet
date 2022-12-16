@@ -27,6 +27,9 @@ with Ada.Streams;
 
 with Anet.OS;
 with Anet.Util;
+with Anet.Types;
+
+with Test_Constants;
 
 package body OS_Tests is
 
@@ -90,7 +93,27 @@ package body OS_Tests is
       T.Add_Test_Routine
         (Routine => Execute_Error'Access,
          Name    => "Execution error");
+      T.Add_Test_Routine
+        (Routine => Interface_Names'Access,
+         Name    => "Interface names");
    end Initialize;
+
+   -------------------------------------------------------------------------
+
+   procedure Interface_Names
+   is
+      use Types.Iface_Name_Vector;
+
+      Names : Vector;
+   begin
+      Names := OS.Get_Network_Interface_Names;
+
+      Assert (Condition => No_Element /=
+                Types.Iface_Name_Vector.Find
+                  (Container => Names,
+                   Item      => Test_Constants.Loopback_Iface_Name),
+              Message   => "Loopback device not found");
+   end Interface_Names;
 
    -------------------------------------------------------------------------
 
