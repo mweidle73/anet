@@ -39,4 +39,7 @@ package Net_Ifaces_Tests is
    procedure Get_Loopback_Interface_IP;
    --  Test get interface IP function on loopback device.
 
+   procedure Get_Loopback_Flags;
+   --  Test get interface flags function on loopback device.
+
 end Net_Ifaces_Tests;

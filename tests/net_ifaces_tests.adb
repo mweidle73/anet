@@ -22,14 +22,38 @@
 --
 
 with Anet.Sockets.Net_Ifaces;
+with Anet.Constants;
 
 with Test_Utils;
 with Test_Constants;
+
+with Interfaces.C;
 
 package body Net_Ifaces_Tests is
 
    use Ahven;
    use Anet;
+
+   -------------------------------------------------------------------------
+
+   procedure Get_Loopback_Flags
+   is
+      use Interfaces.C;
+
+      Flags : unsigned_short := 0;
+   begin
+      if not Test_Utils.Has_Root_Perms then
+         Skip (Message => "Run as root");
+      end if;
+
+      Flags := unsigned_short (Sockets.Net_Ifaces.Get_Iface_Flags
+        (Name => Test_Constants.Loopback_Iface_Name));
+
+      Assert (Condition =>
+                (Flags and (Constants.IFF_LOOPBACK or Constants.IFF_UP)) =
+                  (Constants.IFF_LOOPBACK or Constants.IFF_UP),
+              Message => "Missing loopback or up flag");
+   end Get_Loopback_Flags;
 
    -------------------------------------------------------------------------
 
@@ -101,6 +125,9 @@ package body Net_Ifaces_Tests is
       T.Add_Test_Routine
         (Routine => Get_Loopback_Interface_IP'Access,
          Name    => "Get iface IP addr for loopback");
+      T.Add_Test_Routine
+        (Routine => Get_Loopback_Flags'Access,
+         Name    => "Get iface flags for loopback");
    end Initialize;
 
 end Net_Ifaces_Tests;
