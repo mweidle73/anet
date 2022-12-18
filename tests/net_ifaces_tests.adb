@@ -39,9 +39,13 @@ package body Net_Ifaces_Tests is
    procedure Get_Loopback_Flags
    is
       use Interfaces.C;
+      use type Test_Utils.OS_Type;
 
       Flags : unsigned_short := 0;
    begin
+      if Test_Utils.OS = Test_Utils.BSD then
+         Skip (Message => "Not supported");
+      end if;
       if not Test_Utils.Has_Root_Perms then
          Skip (Message => "Run as root");
       end if;
