@@ -2,7 +2,7 @@ PREFIX   ?= $(HOME)/libraries
 TESTDIR   = tests
 OBJDIR    = obj/$(OS)
 COVDIR    = $(OBJDIR)/coverage
-LIBDIR    = lib
+LIBDIR    = lib/$(OS)
 
 MAJOR    = 0
 MINOR    = 4
