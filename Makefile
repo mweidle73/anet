@@ -14,7 +14,7 @@ TARBALL  = $(ANET).tar.bz2
 
 OS ?= linux
 
-NUM_CPUS ?= 1
+NUM_CPUS ?= $(shell nproc)
 
 # GNAT_BUILDER_FLAGS may be overridden in the
 # environment or on the command line.
