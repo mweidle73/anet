@@ -40,6 +40,8 @@ abstract project Anet_Common is
    Compiler_Switches := ("-gnatygAdISuxo",
                          "-gnatVa",
                          "-gnatf",
+                         "-fcf-protection",
+                         "-fstack-protector-strong",
                          "-fstack-clash-protection",
                          "-gnato",
                          "-g");
