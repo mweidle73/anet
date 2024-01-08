@@ -4,8 +4,8 @@ OBJDIR    = obj/$(OS)
 COVDIR    = $(OBJDIR)/coverage
 
 MAJOR    = 0
-MINOR    = 4
-REVISION = 3
+MINOR    = 5
+REVISION = 0
 # Set VERSION to '' for a static library.
 VERSION  = $(MAJOR).$(MINOR).$(REVISION)
 ANET     = libanet-$(VERSION)
