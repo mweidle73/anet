@@ -1,11 +1,9 @@
 # Makefile snippet intended for inclusion by ../Makefile.
 
-build-doc:
-	rm -rf doc/html
-	mkdir doc/html
+DOCDIR = obj/html
 
-	asciidoctor doc/index -o doc/html/index.html
+$(DOCDIR):
+	@mkdir -p $@
 
-clean: clean-doc
-clean-doc:
-	rm -rf doc/html
+build-doc: doc/index | $(DOCDIR)
+	asciidoctor doc/index -o $(DOCDIR)/index.html
