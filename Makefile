@@ -2,7 +2,6 @@ PREFIX   ?= $(HOME)/libraries
 TESTDIR   = tests
 OBJDIR    = obj/$(OS)
 COVDIR    = $(OBJDIR)/coverage
-LIBDIR    = lib/$(OS)
 
 MAJOR    = 0
 MINOR    = 4
@@ -70,8 +69,7 @@ install-tests: build-tests
 	cp -r data $(DESTDIR)$(PREFIX)/$(TESTDIR)
 
 clean:
-	rm -rf $(OBJDIR)
-	rm -rf $(LIBDIR)
+	rm -rf obj
 
 dist:
 	@echo "Creating release tarball $(TARBALL) ... "
