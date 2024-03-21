@@ -1,4 +1,4 @@
-/* Sligthly modified Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Slightly modified Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}

@@ -34,7 +34,7 @@ package Anet.UDP is
       Dst_Port : Port_Type)
       return Ada.Streams.Stream_Element_Array;
    --  Returns an UDP header for given source and destination port and payload.
-   --  The source, destination IPv4 addresses are used for UDP checksuming.
+   --  The source, destination IPv4 addresses are used for UDP checksumming.
 
    procedure Validate_Checksum
      (Packet : Ada.Streams.Stream_Element_Array;
