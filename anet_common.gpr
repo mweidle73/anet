@@ -31,20 +31,29 @@ abstract project Anet_Common is
    type OS_Type is ("linux", "bsd");
    OS : OS_Type := external ("OS");
 
+   type Target_Type is ("x86_64", "aarch64");
+   Target : Target_Type := external ("TARGET_ARCH", "x86_64");
+
    --  User settings should take precedence over any default.
    Adaflags := External_As_List ("ADAFLAGS", " ");
    Ldflags  := External_As_List ("LDFLAGS", " ");
 
    Obj_Dir := "obj/" & OS;
 
-   Compiler_Switches := ("-gnatygAdISuxo",
-                         "-gnatVa",
-                         "-gnatf",
-                         "-fcf-protection",
-                         "-fstack-protector-strong",
-                         "-fstack-clash-protection",
-                         "-gnato",
-                         "-g");
+   Additional_Switches := ();
+   case Target is
+      when "x86_64"  => Additional_Switches := ("-fcf-protection");
+      when "aarch64" => Additional_Switches := ("-mbranch-protection=standard");
+   end case;
+
+   Compiler_Switches :=
+     ("-gnatygAdISuxo",
+      "-gnatVa",
+      "-gnatf",
+      "-fstack-protector-strong",
+      "-fstack-clash-protection",
+      "-gnato",
+      "-g") & Additional_Switches;
 
    package Binder is
       for Switches ("Ada") use ("-E");
