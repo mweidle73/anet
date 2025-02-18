@@ -31,8 +31,7 @@ abstract project Anet_Common is
    type OS_Type is ("linux", "bsd");
    OS : OS_Type := external ("OS");
 
-   type Target_Type is ("x86_64", "aarch64");
-   Target : Target_Type := external ("TARGET_ARCH", "x86_64");
+   Target := external ("TARGET_ARCH", "x86_64");
 
    --  User settings should take precedence over any default.
    Adaflags := External_As_List ("ADAFLAGS", " ");
@@ -42,8 +41,10 @@ abstract project Anet_Common is
 
    Additional_Switches := ();
    case Target is
-      when "x86_64"  => Additional_Switches := ("-fcf-protection");
-      when "aarch64" => Additional_Switches := ("-mbranch-protection=standard");
+      when "x86_64" => Additional_Switches := ("-fcf-protection");
+      when "aarch64" | "arm" =>
+         Additional_Switches := ("-mbranch-protection=standard");
+      when others => null;
    end case;
 
    Compiler_Switches :=
