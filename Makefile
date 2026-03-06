@@ -7,7 +7,7 @@ MAJOR    = 0
 MINOR    = 5
 REVISION = 1
 # Set VERSION to '' for a static library.
-VERSION  = $(MAJOR).$(MINOR).$(REVISION)
+VERSION ?= $(MAJOR).$(MINOR).$(REVISION)
 ANET     = libanet-$(VERSION)
 TARBALL  = $(ANET).tar.bz2
 
