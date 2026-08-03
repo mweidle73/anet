@@ -45,3 +45,7 @@ With no command, `run` opens an interactive shell in `/work`:
 Set `ANET_CI_IMAGE` to override the local image name, `DOCKER_PLATFORM` to
 override the default `linux/amd64` platform, and `ANET_CI_NETWORK` to override
 the default `none` network mode.
+
+The weekly upstream monitor compares both `master` and every Codelabs `v*`
+release-tag ref with this GitHub mirror. Missing, additional or moved release
+tags fail the workflow for manual review; the workflow never updates tags.
